@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import styles from '../../styles/SeatInfoFormPage.module.css';
+import {useLocation, useNavigate, useParams} from "react-router-dom";
+import {useEffect, useState} from "react";
 import apiClient from "../../apiClient.jsx";
 
-import styles from '../../styles/SeatInfoFormPage.module.css';
 
 function SeatInfoFormPage() {
     const { key } = useParams();
     const [reservation, setReservation] = useState(null);
     const [seats, setSeats] = useState([]);
     const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from || "/";
 
     useEffect(() => {
         apiClient.get('/api/reservations/search', { params: { key } })
@@ -32,23 +34,23 @@ function SeatInfoFormPage() {
                 seats, // 리스트 형태로 seats 전송
                 { params: { key } } // key는 쿼리 파라미터로 전달
             );
-            navigate(`/confirm/${key}`);
+            navigate(`/confirm/${key}`, { state: { from } });
         } catch (err) {
             console.error("좌석 정보 저장 실패:", err);
             alert("좌석 정보 저장 중 오류가 발생했습니다.");
         }
     };
-    
+
     const formatDate = (localDateTimeStr) => {
         const date = new Date(localDateTimeStr);
         const formattedDate = date.toLocaleDateString('ko-KR', {
-          year: 'numeric', month: 'numeric', day: 'numeric', weekday: 'short'
+            year: 'numeric', month: 'numeric', day: 'numeric', weekday: 'short'
         });
         const formattedTime = date.toLocaleTimeString('ko-KR', {
-          hour: '2-digit', minute: '2-digit'
+            hour: '2-digit', minute: '2-digit'
         });
         return `${formattedDate} ${formattedTime}`;
-      };
+    };
 
     return (
         <div className={styles.container}>

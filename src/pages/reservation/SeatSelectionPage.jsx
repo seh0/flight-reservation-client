@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import styles from '../../styles/SelectSeat.module.css';
+import {useLocation, useNavigate, useParams} from "react-router-dom";
+import {useEffect, useState} from "react";
 import apiClient from "../../apiClient.jsx";
 
-import styles from '../../styles/SelectSeat.module.css';
 
 export default function SeatSelectionPage() {
     const { key } = useParams();
@@ -11,6 +11,8 @@ export default function SeatSelectionPage() {
     const [lockedSeats, setLockedSeats] = useState([]);
     const [selectedSeats, setSelectedSeats] = useState([]);
     const navigate = useNavigate();
+    const location = useLocation();
+    const { from } = location.state || {};
 
     // 1) 예약 정보, 2) 예매 완료 좌석, 3) 락된 좌석 함께 불러오기
     useEffect(() => {
@@ -93,7 +95,7 @@ export default function SeatSelectionPage() {
                 return;
             }
             await apiClient.post('/api/reservations/seats', locked.map(spot=>seatsWithPrice.find(s=>s.sSpot===spot)), { params:{ key } });
-            navigate(`/form/${key}`);
+            navigate(`/form/${key}`, { state: { from } });
         } catch {
             alert('다음 단계로 이동 중 오류 발생');
         }

@@ -1,42 +1,41 @@
-import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import apiClient from "../../apiClient.jsx";
+import {useLocation} from "react-router-dom";
+import FlightDetailCard from "../../components/reservation/FlightDetailCard.jsx";
 
-const FlightDetail = () =>  {
-    const { id } = useParams();
-    const [flight, setFlight] = useState(null);
-    const navigate = useNavigate();
 
-    useEffect(() => {
-        apiClient.get(`/api/flights/${id}`)
-            .then((res) => setFlight(res.data))
-            .catch((err) => console.error("항공편 정보 불러오기 실패", err));
-    }, [id]);
+const FlightDetail = () => {
+  const searchParams = new URLSearchParams(useLocation().search);
+  const departureId = Number(searchParams.get('departureId'));
+  const arrivalIdRaw = searchParams.get('arrivalId');
+  const arrivalId = arrivalIdRaw ? Number(arrivalIdRaw) : null;
 
-    const handleReserve = async () => {
-        try {
-            await apiClient.post("/api/kafka/publish", flight);
-            alert("예약이 완료되었습니다.");
-            navigate("/loading");
-        } catch (error) {
-            console.error("Kafka 전송 실패", error);
-            alert("예약 실패");
-        }
-    };
+  const isRoundTrip = !!arrivalId;
 
-    if (!flight) return <p>로딩 중...</p>;
+  return (
+      <div style={{ margin: '0 auto', padding: '20px' }}>
+        <h2 style={{ textAlign: 'center' }}>
+          {isRoundTrip ? '✈️ 왕복 항공편 상세' : '🛫 편도 항공편 상세'}
+        </h2>
 
-    return (
-        <div className="flight-detail">
-            <h2>{flight.departureName} → {flight.arrivalName}</h2>
-            <p>출발: {flight.departureTime}</p>
-            <p>도착: {flight.arrivalTime}</p>
-            <p>기종: {flight.aircraftType}</p>
-            <p>남은 좌석: {flight.seatCount}</p>
+          <div
+              style={{
+                  display: "flex",
+                  gap: "50px",           // 카드 사이 간격
+                  flexWrap: "wrap",      // 좁은 화면에서 자동 줄바꿈
+                  justifyContent: "center",
+              }}
+          >
+              {/* 출발 항공편 */}
+              {departureId ? (
+                  <FlightDetailCard fId={departureId} />
+              ) : (
+                  <p style={{ color: "red" }}>출발 항공편 정보 없음</p>
+              )}
 
-            <button onClick={handleReserve}>이 항공편 예약하기</button>
-        </div>
-    );
-}
+              {/* 돌아오는 항공편 (있을 경우만 출력) */}
+              {arrivalId && <FlightDetailCard fId={arrivalId} />}
+          </div>
+      </div>
+  );
+};
 
 export default FlightDetail;

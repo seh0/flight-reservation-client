@@ -2,7 +2,7 @@ import PlaceLink from "../components/home/PlaceLink.jsx";
 import QuickLink from "../components/home/QuickLink.jsx";
 import AdBanner from "../components/home/AdBanner.jsx";
 import SearchFlight from "../components/flight/SearchFlight.jsx";
-import GoogleMapPreview from "../components/GoogleMapPreview.jsx";
+import GoogleMapPreview from "../components/map/GoogleMapPreview.jsx";
 import "../styles/Home.css"
 
 function Home() {
@@ -19,7 +19,7 @@ function Home() {
                     alt="Banner Image"
                     className="banner-img"
                 />
-                <img src="/images/plane.png" alt="Flying" className="flying-plane" />
+                <img src="/images/mainplane.png" alt="Flying" className="flying-plane" />
             </div>
 
             <div className="contents-box">

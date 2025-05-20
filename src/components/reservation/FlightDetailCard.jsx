@@ -35,7 +35,6 @@ const FlightDetailCard = ({ fId }) => {
                 reservationId,
                 flight
             });
-            console.log(reservationId);
 
             // 현재 위치 기억해서 /loading으로 이동할 때 전달
             const currentUrl = location.pathname + location.search;

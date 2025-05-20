@@ -17,8 +17,6 @@ function MyPage() {
   const currentUserEmail = useSelector((state) => state.auth.email);
   const [user, setUser] = useState(null);
   const [selectedMenu, setSelectedMenu] = useState("summary");
-  const [isEditing, setIsEditing] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,21 +47,17 @@ function MyPage() {
     })();
   }, [accessToken, navigate]);
 
-  const handleEditProfile = () => setIsEditing(true);
-  const handleCancelEdit = () => setIsEditing(false);
   const handleSaveProfile = async (updatedUser) => {
     try {
       await apiClient.put(`api/users/${updatedUser.id}`, updatedUser);
       setUser(updatedUser);
       alert("내정보가 성공적으로 업데이트되었습니다.");
       setIsEditing(false);
+      window.location.reload();
     } catch (error) {
       alert("내정보 업데이트 중 문제가 발생했습니다." + error);
     }
   };
-
-  const handleDeleteAccount = () => setIsDeleting(true);
-  const handleCancelDelete = () => setIsDeleting(false);
 
   const handleConfirmDelete = async (inputEmail) => {
     if (inputEmail.trim().toLowerCase() !== currentUserEmail.toLowerCase()) {

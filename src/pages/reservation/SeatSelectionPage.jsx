@@ -2,7 +2,7 @@ import styles from '../../styles/SelectSeat.module.css';
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import apiClient from "../../apiClient.jsx";
-
+import React from 'react';
 
 export default function SeatSelectionPage() {
     const { key } = useParams();

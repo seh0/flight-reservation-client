@@ -3,6 +3,8 @@ import {useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {jwtDecode} from "jwt-decode";
 
+import apiClient from "../../apiClient.jsx";
+
 
 function ReservationPage() {
     const location = useLocation();

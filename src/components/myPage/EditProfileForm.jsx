@@ -16,6 +16,7 @@ function EditProfileForm({ user, onCancel, onSave }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         onSave(editedUser);
+
     };
 
     return (
